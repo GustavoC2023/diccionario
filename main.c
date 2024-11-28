@@ -1,12 +1,13 @@
-#include "main.h"
-#include "entity.h"
 
-int main(int argc, char **argv)
+#include "entity.c"
+#include "dictionary.c"
+#include "attribute.c"
+int main()
 {
     int currentUserSelection = NO_SELECTION;
 
     while (currentUserSelection != CLOSE_PROGRAM)
-    {   
+    {
         printMainMenu();
         currentUserSelection = readUserInput();
         processUserSelection(currentUserSelection);
@@ -21,25 +22,24 @@ void printMainMenu()
     printf("%d) Create a new dictionary.\n", NEW_DICTIONARY);
     printf("%d) Open an existing dictionary.\n", OPEN_DICTIONARY);
     printf("%d) Exit.\n", CLOSE_PROGRAM);
-    
 }
 
-void printSubmenu(){
+void printSubmenu()
+{
 
     printf("\n\t----SUBMENU DICTIONARY----\n");
 
-    printf("%d) Printf dictionary",PRINTF_DICTIONARY); 
+    printf("%d) Printf dictionary", PRINTF_DICTIONARY);
     printf("\n------------------------------\n");
-    printf("%d) New Entity.\n",ADD_ENTITY);
-    printf("%d) Delete Entity.\n",DELETE_ENTITY);
-    printf("%d) Modify Entity.\n",MODIFI_ENTITY);
+    printf("%d) New Entity.\n", ADD_ENTITY);
+    printf("%d) Delete Entity.\n", DELETE_ENTITY);
+    printf("%d) Modify Entity.\n", MODIFI_ENTITY);
     printf("\n------------------------------\n");
-    printf("%d) New Attribute.\n",ADD_ATTRIBUTE);
-    printf("%d) Delete Attribute.\n",DELETE_ATTRIBIUTE);
-    printf("%d) Modify Attribute.\n",MODIFY_ATTRIBUTE);
+    printf("%d) New Attribute.\n", ADD_ATTRIBUTE);
+    printf("%d) Delete Attribute.\n", DELETE_ATTRIBIUTE);
+    printf("%d) Modify Attribute.\n", MODIFY_ATTRIBUTE);
     printf("\n------------------------------\n");
-    printf("%d) Return Main Menu.\n",RETURN);
-
+    printf("%d) Return Main Menu.\n", RETURN);
 }
 
 int readUserInput()
@@ -75,18 +75,18 @@ void processUserSelection(DictionaryMenuOption userSelection)
         break;
     case OPEN_DICTIONARY:
         readUserString("Enter the data dictionary name: ", fileName, sizeof(fileName));
-        openDataDictionary(fileName);
 
-        if(openDataDictionary==EXIT_SUCCESS){
+        if (openDataDictionary(fileName) == EXIT_SUCCESS)
+        {
 
             printf("Dictionary Opened!");
+
+            printSubmenu();
+            int currentSelectionSub = readUserInput();
+
+            processUserSelectionSubmenu(currentSelectionSub, fileName);
         }
 
-        printSubmenu();
-        int currentSelectionSub=readUserInput();
-            
-        processUserSelectionSubmenu(currentSelectionSub,fileName);
-        
         break;
     case CLOSE_PROGRAM:
 
@@ -99,10 +99,12 @@ void processUserSelection(DictionaryMenuOption userSelection)
     }
 }
 
-void processUserSelectionSubmenu(DictionaryMenuOption userSelection,char fileName[MAX_NAME_SIZE]){
+void processUserSelectionSubmenu(DictionaryMenuOption userSelection, char fileName[MAX_NAME_SIZE])
+{
 
     char entityname[MAX_NAME_SIZE];
     char attributename[MAX_NAME_SIZE];
+    char attributeNewName[MAX_NAME_SIZE];
     char newEntityName[MAX_NAME_SIZE];
     int attribute_type;
 
@@ -112,41 +114,65 @@ void processUserSelectionSubmenu(DictionaryMenuOption userSelection,char fileNam
     case PRINTF_DICTIONARY:
         printDataDictionary(fileName);
         break;
-    
+
     case ADD_ENTITY:
-        
-        readUserString("Enter the entity name: ",entityname,sizeof(entityname));
-        newDataEntity(fileName,entityname);
-        break;     
 
-    
+        readUserString("Enter the entity name: ", entityname, sizeof(entityname));
+        newDataEntity(fileName, entityname);
+        break;
+
     case DELETE_ENTITY:
-        readUserString("Enter the data entity name: ",entityname,sizeof(entityname));  
-        removeDataEntity(fileName,0L,entityname);   
+        readUserString("Enter the data entity name: ", entityname, sizeof(entityname));
+        removeDataEntity(fileName, 0L, entityname);
 
-        break;   
+        break;
 
     case MODIFI_ENTITY:
 
-        readUserString("Enter the entity Name: ",entityname,sizeof(entityname));
-        readUserString("Enter the new name of Entity: ",newEntityName, sizeof(newEntityName));
-        modifyEntityNameInFile(fileName,entityname,newEntityName);
-        break;  
+        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
+        readUserString("Enter the new name of Entity: ", newEntityName, sizeof(newEntityName));
+        modifyEntityNameInFile(fileName, entityname, newEntityName);
+        break;
 
-    /*case ADD_ATTRIBUTE:
+    case ADD_ATTRIBUTE:
 
-        readUserString("Enter the entity Name: ",entityname,sizeof(entityname));
-        readUserString("Enter the attribute name: ",attributename,sizeof(attributename)); 
-        printf("Enter the type of the attribute: 0(char) 1(int) 2(varchar): ");scanf("%d",&attribute_type);
+        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
+        readUserString("Enter the attribute name: ", attributename, sizeof(attributename));
+        printf("Enter the type of the attribute: 0(char) 1(int) 2(varchar): ");
+        scanf("%d", &attribute_type);
 
-        newDataAttribute(fileName,entityname,attributename,attribute_type);
-        break;*/
-    
+        newDataAttribute(fileName, entityname, attributename, attribute_type);
+        break;
+
+    case DELETE_ATTRIBIUTE:
+
+        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
+        readUserString("Enter the attribute name: ", attributename, sizeof(attributename));
+        removeDataAttribute(fileName, 0L, entityname, attributename);
+
+        break;
+
+    case MODIFY_ATTRIBUTE:
+
+        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
+        readUserString("Enter the attribute name: ", attributename, sizeof(attributename));
+        readUserString("Enter the New attribute name: ", attributeNewName, sizeof(attributeNewName));
+        printf("Enter the type of the attribute: 0(char) 1(int) 2(varchar): ");
+        scanf("%d", &attribute_type);
+        modifyAttribute(fileName, entityname, attributename, attributeNewName, attribute_type);
+
+        break;
+
+    case RETURN:
+
+        return;
+
+        break;
+
     default:
         printf("Invalid option!");
         break;
     }
-
 }
 
 void readUserString(const char *prompt, char *buffer, size_t size)

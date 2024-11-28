@@ -86,6 +86,7 @@ void printEntityData(FILE *dataDicitonary, long currentHeaderPointer) {
     }
     else {
         char currentEntityName[50];
+        long attributePointer;
         long nextHeaderPointer;
 
         // Go to the Entity location and read its data.
@@ -95,6 +96,8 @@ void printEntityData(FILE *dataDicitonary, long currentHeaderPointer) {
 
         printf("Entity: %s\n", currentEntityName);
         nextHeaderPointer = ftell(dataDicitonary) + (sizeof(long)*2);
+        attributePointer=ftell(dataDicitonary)+sizeof(long);
+        printAttributeyData(dataDicitonary,attributePointer);
         printEntityData(dataDicitonary, nextHeaderPointer);
     } 
 }
@@ -141,7 +144,7 @@ int removeEntity(FILE *dataDictionary, long currentEntityPointer, Entity *entity
 
 int ModifyEntityName(FILE *dataDictionary, long currentEntityPointer, Entity *entityTemp, long *removedApAtributo)
 {
-    long currentEntityDirection = -1;
+    long currentEntityDirection = -1L;
     fseek(dataDictionary, currentEntityPointer, SEEK_SET);
     fread(&currentEntityDirection, sizeof(long), 1, dataDictionary);
 
@@ -161,6 +164,7 @@ int ModifyEntityName(FILE *dataDictionary, long currentEntityPointer, Entity *en
 
         if (strcmp(currentEntityNamel, entityTemp->Name) == 0)
         {
+            entityTemp->FileDirection=currentEntityDirection;
             fread(&entityTemp->ApData, sizeof(long), 1, dataDictionary);
             fread(&entityTemp->ApAtributo, sizeof(long), 1, dataDictionary);
             fread(&entityTemp->ApEntidad, sizeof(long), 1, dataDictionary);
@@ -206,6 +210,6 @@ long search_entity(FILE *dataDictionary, const long Header, const char* EntityNa
     }
 
     long next_entity=ftell(dataDictionary)+(sizeof(long)*2);
-    return search_entity(dataDictionary,next_entity,entityName);
+    return search_entity(dataDictionary,next_entity,EntityName);
 }
 

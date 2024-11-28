@@ -21,5 +21,6 @@ long getDataDictionaryHeader(FILE *dataDicitonary);
 void printEntityData(FILE *dataDicitonary, long currentHeaderPointer);
 int removeEntity(FILE *dataDictionary, long currentEntityPointer, Entity *entityTemp);
 int ModifyEntityName(FILE *dataDictionary, long currentEntityPointer, Entity *entityTemp, long *removedApAtributo);
+long search_entity(FILE *dataDictionary, const long Header, const char* EntityName);
 
 #endif

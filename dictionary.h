@@ -31,6 +31,8 @@ void printDataDictionary(const char * filename);
 int removeDataEntity(const char *filename, long current_posicion, const char *entity_name);
 int modifyEntityNameInFile(const char *filename, const char *EntityCurrentName, const char *entity_NewName);
 int newDataAttribute(const char *filename, const char *entityName, const char *attributeName,int attributeType);
+int removeDataAttribute(const char *filename, long current_position, const char* entityName, const char* attributeName);
+int modifyAttribute(const char*filename, const char* EntityName,const char*AttribueCurrentName, const char* AttributeNewName, int AttributeNewType);
 
 
 

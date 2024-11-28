@@ -22,10 +22,12 @@ typedef struct DataAttribute
     
 }Attribute;
 
-int appendAttribute(FILE *dataDictionary, long entityPointer, Attribute *attribute);
-void reassignAttributePointers(FILE *dataDictionary, long currentAttributePointer, Attribute newAttribute);
-void printEntityData(FILE *dataDicitonary, long currentHeaderPointer);
-long search_entity(FILE *dataDictionary, const long Header, const char* EntityName);
+int appendAttribute(FILE *dataDictionary, Attribute *NewAttribute);
+void reassingAttributePointer(FILE *dataDictionary, const long CurrentHeader, Attribute *NewAttribute);
+void printAttributeyData(FILE *dataDicitonary, long currentHeaderPointer);
+int removeAttribute(FILE *dataDictionary, long currentAttributeHeader, Attribute *AttributeTmp);
+
 
 
 #endif
+
