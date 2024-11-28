@@ -182,7 +182,7 @@ int ModifyEntityName(FILE *dataDictionary, long currentEntityPointer, Entity *en
 
 
 
-/*long search_entity(FILE *dataDictionary, const long Header, const char* EntityName){
+long search_entity(FILE *dataDictionary, const long Header, const char* EntityName){
 
     long CurrentHeader;
 
@@ -209,4 +209,3 @@ int ModifyEntityName(FILE *dataDictionary, long currentEntityPointer, Entity *en
     return search_entity(dataDictionary,next_entity,entityName);
 }
 
-*/

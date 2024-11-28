@@ -148,7 +148,7 @@ void printDataDictionary(const char * filename) {
     fclose(file);
 }
 
-/*int newDataAttribute(const char *filename, const char *entityName, const char *attributeName,int attributeType) {
+int newDataAttribute(const char *filename, const char *entityName, const char *attributeName,int attributeType) {
 
     int operationResult = EXIT_SUCCESS;
     int size;

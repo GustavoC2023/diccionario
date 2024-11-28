@@ -38,7 +38,7 @@ void printAttributes(FILE *dataDictionary, long attributePointer) {
     }
 }
 
-/*void appendAttribute(FILE *dataDictionary, const long AttributeDirection){
+void appendAttribute(FILE *dataDictionary, const long AttributeDirection){
 
 
     Attribute tmp;
