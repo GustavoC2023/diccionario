@@ -10,16 +10,13 @@ int appendEntity(FILE *dataDicitonary, Entity* dataEntity){
     newEntityPosition = ftell(dataDicitonary);
     dataEntity->FileDirection = newEntityPosition;
 
-    // Add the entity name
+    
     fwrite(&dataEntity->Name, sizeof(char), sizeof(dataEntity->Name), dataDicitonary);
-    // Data pointer
     fwrite(&dataEntity->ApData, sizeof(long), 1, dataDicitonary);
-    // Attributes pointer
     fwrite(&dataEntity->ApAtributo, sizeof(long), 1, dataDicitonary);
-    // Next entity pointer
     fwrite(&dataEntity->ApEntidad, sizeof(long), 1, dataDicitonary);
 
-    printf("New entity \"%s\" added at position %ld\n", dataEntity->Name, dataEntity->FileDirection);
+    printf("Nueva entidad \"%s\" se añadio a la posicion %ld\n", dataEntity->Name, dataEntity->FileDirection);
     
     return operationResult;
 }
@@ -31,7 +28,6 @@ void reassignEntityPointers(FILE *dataDicitonary, long currentHeaderPointer, con
     fread(&headerValue, sizeof(headerValue), 1, dataDicitonary);
 
     if(headerValue == -1L) {
-        // No more entities to iterate. Set the current pointer to the new entity direction.
         fseek(dataDicitonary, currentHeaderPointer, SEEK_SET);
         fwrite(&newEntityDirection, sizeof(long), 1, dataDicitonary);
 
@@ -42,21 +38,19 @@ void reassignEntityPointers(FILE *dataDicitonary, long currentHeaderPointer, con
         char currentEntityName[50];
         long nextHeaderPointer;
 
-        // Go to the Entity location and read its data.
+       
         fseek(dataDicitonary, headerValue, SEEK_SET);
-        // Read the name for the entity at the current position.
+        
         fread(&currentEntityName, sizeof(char), 50, dataDicitonary); 
         nextHeaderPointer = ftell(dataDicitonary) + (sizeof(long) * 2);
-        // Compare the Entity names to determine whether the current entity should be before the new one or not.
         if(strcmp(currentEntityName, newEntityName) < 0) {
-            // Current entity is before the new one.
+       
             reassignEntityPointers(dataDicitonary, nextHeaderPointer, newEntityName, newEntityDirection);
         }
         else {
-            // Reassign first pointer.
+            
             fseek(dataDicitonary, currentHeaderPointer, SEEK_SET);
             fwrite(&newEntityDirection, sizeof(long), 1, dataDicitonary);
-            // Reassign new entity pointer.
             fseek(dataDicitonary, newEntityDirection + 50 + (sizeof(long) * 2), SEEK_SET);
             fwrite(&headerValue, sizeof(long), 1, dataDicitonary);
 
@@ -89,12 +83,11 @@ void printEntityData(FILE *dataDicitonary, long currentHeaderPointer) {
         long attributePointer;
         long nextHeaderPointer;
 
-        // Go to the Entity location and read its data.
+        
         fseek(dataDicitonary, headerValue, SEEK_SET);
-        // Read the name for the entity at the current position.
         fread(&currentEntityName, sizeof(char), 50, dataDicitonary); 
 
-        printf("Entity: %s\n", currentEntityName);
+        printf("Entidad: %s\n", currentEntityName);
         nextHeaderPointer = ftell(dataDicitonary) + (sizeof(long)*2);
         attributePointer=ftell(dataDicitonary)+sizeof(long);
         printAttributeyData(dataDicitonary,attributePointer);
@@ -109,7 +102,7 @@ int removeEntity(FILE *dataDictionary, long currentEntityPointer, Entity *entity
 
     if (currentEntityDirection == -1L)
     {
-        fprintf(stderr, "Error de eliminaciÃ³n, entidad no encontrada\n");
+        fprintf(stderr, "entidad no encontrada\n");
         return EXIT_FAILURE;
     }
     else
@@ -132,7 +125,7 @@ int removeEntity(FILE *dataDictionary, long currentEntityPointer, Entity *entity
 
             fseek(dataDictionary, currentEntityPointer, SEEK_SET);
             fwrite(&entityTemp->ApEntidad, sizeof(long), 1, dataDictionary);
-            fprintf(stdout, "Eliminacion exitosa, entidad eliminada\n");
+            fprintf(stdout, "entidad eliminada\n");
             return EXIT_SUCCESS;
         }
         else
@@ -148,42 +141,41 @@ int ModifyEntityName(FILE *dataDictionary, long currentEntityPointer, Entity *en
     fseek(dataDictionary, currentEntityPointer, SEEK_SET);
     fread(&currentEntityDirection, sizeof(long), 1, dataDictionary);
 
-    if (currentEntityDirection == -1L)
-    {
-        fprintf(stderr, "Entity was not found\n");
+    if (currentEntityDirection == -1L) {
+        fprintf(stderr, "no se encontro la entidad\n");
         return EXIT_FAILURE;
     }
-    else
-    {
-        char currentEntityNamel[50];
+    else {
+        char currentEntityName[50];
         long NextEntity;
 
         fseek(dataDictionary, currentEntityDirection, SEEK_SET);
-        fread(&currentEntityNamel, sizeof(char), 50, dataDictionary);
-        NextEntity = ftell(dataDictionary) + (sizeof(long) * 2);
+        fread(&currentEntityName, sizeof(char), 50, dataDictionary);
+        NextEntity = ftell(dataDictionary) + (sizeof(long) * 3);
 
-        if (strcmp(currentEntityNamel, entityTemp->Name) == 0)
-        {
-            entityTemp->FileDirection=currentEntityDirection;
+        if (strcmp(currentEntityName, entityTemp->Name) == 0) {
+            entityTemp->FileDirection = currentEntityDirection;
             fread(&entityTemp->ApData, sizeof(long), 1, dataDictionary);
             fread(&entityTemp->ApAtributo, sizeof(long), 1, dataDictionary);
             fread(&entityTemp->ApEntidad, sizeof(long), 1, dataDictionary);
 
             // Guardar el valor de ApAtributo de la entidad eliminada
             *removedApAtributo = entityTemp->ApAtributo;
+            fseek(dataDictionary, currentEntityDirection, SEEK_SET);
+            fwrite(entityTemp->Name, sizeof(char), 50, dataDictionary);
 
-            fseek(dataDictionary, currentEntityPointer, SEEK_SET);
+            fwrite(&entityTemp->ApData, sizeof(long), 1, dataDictionary);
+            fwrite(&entityTemp->ApAtributo, sizeof(long), 1, dataDictionary);
             fwrite(&entityTemp->ApEntidad, sizeof(long), 1, dataDictionary);
-            fprintf(stdout, "The entity was eliminated\n");
+
+            fprintf(stdout, "se a modificado la entidad\n");
             return EXIT_SUCCESS;
         }
-        else
-        {
+        else {
             return ModifyEntityName(dataDictionary, NextEntity, entityTemp, removedApAtributo);
         }
     }
 }
-
 
 
 long search_entity(FILE *dataDictionary, const long Header, const char* EntityName){

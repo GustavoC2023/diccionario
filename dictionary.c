@@ -9,17 +9,17 @@ void initializeDataDictionary(const char *filename)
 
     if (file == NULL)
     {
-        fprintf(stderr, "Failed to create the data dictionary.\n");
+        fprintf(stderr, "no se pudo crear el diccionario\n");
     }
 
     if (fwrite(&header, sizeof(header), 1, file) != 1)
     {
-        fprintf(stderr, "Failed to initialize the data dicitonary.\n");
+        fprintf(stderr, "no se pudo inicializar el diccionario\n");
     }
     else
     {
 
-        fprintf(stderr, "Dictionary %s created!.\n", filename);
+        fprintf(stderr, "diccionario %s creado\n", filename);
     }
 
     fclose(file);
@@ -35,18 +35,18 @@ int openDataDictionary(const char *filename)
     {
         if (fread(&header, sizeof(header), 1, file) != 1)
         {
-            fprintf(stderr, "Failed to read data.\n");
+            fprintf(stderr, "no se pudo leer\n");
             opeationResult = EXIT_FAILURE;
         }
         else
         {
-            printf("The header value is: %ld\n", header);
+            printf("el valor de la cabecera es de: %ld\n", header);
         }
         fclose(file);
     }
     else
     {
-        fprintf(stderr, "Failed to open the data dictionary.\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
         opeationResult = EXIT_FAILURE;
     }
 
@@ -80,7 +80,7 @@ int newDataEntity(const char *filename, const char *entityName)
     }
     else
     {
-        fprintf(stderr, "Failed to open the data dictionary.\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
         operationResult = EXIT_FAILURE;
     }
 
@@ -105,7 +105,7 @@ int removeDataEntity(const char *filename, long current_posicion, const char *en
     }
     else
     {
-        fprintf(stderr, "Failed to open the data dictionary\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
         operationResult = EXIT_FAILURE;
     }
 
@@ -149,12 +149,12 @@ void printDataDictionary(const char *filename)
     {
         Entity dataEntity;
 
-        printf("Dictionary name: %s\n", filename);
+        printf("nombre del diccionario: %s\n", filename);
         printEntityData(file, MAIN_HEADER_POSITION);
     }
     else
     {
-        fprintf(stderr, "Failed to open the data dictionary.\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
     }
 
     fclose(file);
@@ -191,13 +191,13 @@ int newDataAttribute(const char *filename, const char *entityName, const char *a
                 break;
 
             case VARCHAR:
-                printf("Enter the VARCHAR size: ");
+                printf("dar tamaño de la cadena: ");
                 scanf("%d", &atribute.size);
                 atribute.Type = VARCHAR;
                 break;
             default:
 
-                printf("Error. Invalid Type");
+                printf("no se puede");
                 break;
             }
 
@@ -211,7 +211,7 @@ int newDataAttribute(const char *filename, const char *entityName, const char *a
             else
             {
 
-                printf("Error in add attribute");
+                printf("no se pudo añadir el atributo");
             }
 
             fclose(file);
@@ -219,13 +219,13 @@ int newDataAttribute(const char *filename, const char *entityName, const char *a
         else
         {
 
-            printf("Entidad was not found");
+            printf("no se encontro la entidad");
             operationResult = EXIT_FAILURE;
         }
     }
     else
     {
-        fprintf(stderr, "Failed to open the data dictionary\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
         operationResult = EXIT_FAILURE;
     }
 
@@ -256,14 +256,14 @@ int removeDataAttribute(const char *filename, long current_position, const char 
         else
         {
 
-            fprintf(stderr, "Entity was not found\n");
+            fprintf(stderr, "no se enocntro la entidad\n");
             operationResult = EXIT_FAILURE;
         }
     }
     else
     {
 
-        fprintf(stderr, "Failed to open the data dictionary\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
         operationResult = EXIT_FAILURE;
     }
 }
@@ -305,13 +305,13 @@ int modifyAttribute(const char*filename, const char* EntityName,const char*Attri
                 break;
             case VARCHAR:
                 NewAttribute.Type=VARCHAR;
-                printf("Enter the size of VARCHAR: ");
+                printf("ingrese el tamaño de la cadena ");
                 scanf("%d",&NewAttribute.size);
                 break;
             
             default:
 
-                printf("Invalid Option!");
+                printf("no se puede");
                 break;
             }
 
@@ -325,7 +325,7 @@ int modifyAttribute(const char*filename, const char* EntityName,const char*Attri
             else
             {
 
-                printf("Error in add attribute");
+                printf("no se pudo añadir el atributo");
             }
 
             fclose(file);
@@ -335,14 +335,14 @@ int modifyAttribute(const char*filename, const char* EntityName,const char*Attri
         else
         {
 
-            fprintf(stderr, "Entity was not found\n");
+            fprintf(stderr, "la entidad no pudo ser encontrada\n");
             operationResult = EXIT_FAILURE;
         }
     }
     else
     {
 
-        fprintf(stderr, "Failed to open the data dictionary\n");
+        fprintf(stderr, "no se pudo abrir el diccionario\n");
         operationResult = EXIT_FAILURE;
     }
 }

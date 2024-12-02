@@ -18,34 +18,31 @@ int main()
 
 void printMainMenu()
 {
-    printf("\n\t----PRINCIPAL MENU----\n");
-    printf("%d) Create a new dictionary.\n", NEW_DICTIONARY);
-    printf("%d) Open an existing dictionary.\n", OPEN_DICTIONARY);
-    printf("%d) Exit.\n", CLOSE_PROGRAM);
+    printf("\n\t----PRIMER MENU----\n");
+    printf("%d) CREAR DICCIONARIO\n", NEW_DICTIONARY);
+    printf("%d) ABRIR DICCIONARIO\n", OPEN_DICTIONARY);
+    printf("%d) SALIR\n", CLOSE_PROGRAM);
 }
 
 void printSubmenu()
 {
 
-    printf("\n\t----SUBMENU DICTIONARY----\n");
+    printf("\n\t----SEGUNDO MENU----\n");
 
-    printf("%d) Printf dictionary", PRINTF_DICTIONARY);
-    printf("\n------------------------------\n");
-    printf("%d) New Entity.\n", ADD_ENTITY);
-    printf("%d) Delete Entity.\n", DELETE_ENTITY);
-    printf("%d) Modify Entity.\n", MODIFI_ENTITY);
-    printf("\n------------------------------\n");
-    printf("%d) New Attribute.\n", ADD_ATTRIBUTE);
-    printf("%d) Delete Attribute.\n", DELETE_ATTRIBIUTE);
-    printf("%d) Modify Attribute.\n", MODIFY_ATTRIBUTE);
-    printf("\n------------------------------\n");
-    printf("%d) Return Main Menu.\n", RETURN);
+    printf("%d) IMPRIMIR DICCIONARIO\n", PRINTF_DICTIONARY);
+    printf("%d) NUEVA ENTIDAD\n", ADD_ENTITY);
+    printf("%d) ELIMINAR ENTIDAD\n", DELETE_ENTITY);
+    printf("%d) MODIFICAR ENTIDAD\n", MODIFI_ENTITY);
+    printf("%d) NUEVO ATRIBUTO\n", ADD_ATTRIBUTE);
+    printf("%d) ELIMINAR ATRIBUTO\n", DELETE_ATTRIBIUTE);
+    printf("%d) MODIFICAR ATRIBUTO\n", MODIFY_ATTRIBUTE);
+    printf("%d) REGRESAR AL PRIMER MENU\n", RETURN);
 }
 
 int readUserInput()
 {
     int userSelection;
-    printf("Please select an option:");
+    printf("selecciona:");
 
     scanf("%d", &userSelection);
 
@@ -69,18 +66,15 @@ void processUserSelection(DictionaryMenuOption userSelection)
     switch (userSelection)
     {
     case NEW_DICTIONARY:
-        readUserString("Enter the data dictionary name: ", fileName, sizeof(fileName));
+        readUserString("ingresa el nombre del diccionario: ", fileName, sizeof(fileName));
         initializeDataDictionary(fileName);
 
         break;
     case OPEN_DICTIONARY:
-        readUserString("Enter the data dictionary name: ", fileName, sizeof(fileName));
+        readUserString("ingresa el nombre del diccionario que quieres abrir:", fileName, sizeof(fileName));
 
         if (openDataDictionary(fileName) == EXIT_SUCCESS)
         {
-
-            printf("Dictionary Opened!");
-
             printSubmenu();
             int currentSelectionSub = readUserInput();
 
@@ -90,11 +84,11 @@ void processUserSelection(DictionaryMenuOption userSelection)
         break;
     case CLOSE_PROGRAM:
 
-        printf("Closing...");
+        printf("cierra.");
         break;
 
     default:
-        printf("Invalid option!");
+        printf("opcion invalida");
         break;
     }
 }
@@ -117,28 +111,28 @@ void processUserSelectionSubmenu(DictionaryMenuOption userSelection, char fileNa
 
     case ADD_ENTITY:
 
-        readUserString("Enter the entity name: ", entityname, sizeof(entityname));
+        readUserString("ingresa el nombre de la entidad: ", entityname, sizeof(entityname));
         newDataEntity(fileName, entityname);
         break;
 
     case DELETE_ENTITY:
-        readUserString("Enter the data entity name: ", entityname, sizeof(entityname));
+        readUserString("ingresa el nombre de la entidad que quieras eliminar ", entityname, sizeof(entityname));
         removeDataEntity(fileName, 0L, entityname);
 
         break;
 
     case MODIFI_ENTITY:
 
-        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
-        readUserString("Enter the new name of Entity: ", newEntityName, sizeof(newEntityName));
+        readUserString("ingresa entidad para modificar: ", entityname, sizeof(entityname));
+        readUserString("ingresa el NUEVO nombre: ", newEntityName, sizeof(newEntityName));
         modifyEntityNameInFile(fileName, entityname, newEntityName);
         break;
 
     case ADD_ATTRIBUTE:
 
-        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
-        readUserString("Enter the attribute name: ", attributename, sizeof(attributename));
-        printf("Enter the type of the attribute: 0(char) 1(int) 2(varchar): ");
+        readUserString("ingresa el nombre de la entidad: ", entityname, sizeof(entityname));
+        readUserString("ahora ingresa el nombre qu quieres el nombre del atributo: ", attributename, sizeof(attributename));
+        printf("selecciona el tipo: 0(char) 1(int) 2(varchar): ");
         scanf("%d", &attribute_type);
 
         newDataAttribute(fileName, entityname, attributename, attribute_type);
@@ -146,18 +140,18 @@ void processUserSelectionSubmenu(DictionaryMenuOption userSelection, char fileNa
 
     case DELETE_ATTRIBIUTE:
 
-        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
-        readUserString("Enter the attribute name: ", attributename, sizeof(attributename));
+        readUserString("ingresa la entidad del atributo que quieras eliminar: ", entityname, sizeof(entityname));
+        readUserString("ingresa el atributo que quieras eliminar: ", attributename, sizeof(attributename));
         removeDataAttribute(fileName, 0L, entityname, attributename);
 
         break;
 
     case MODIFY_ATTRIBUTE:
 
-        readUserString("Enter the entity Name: ", entityname, sizeof(entityname));
-        readUserString("Enter the attribute name: ", attributename, sizeof(attributename));
-        readUserString("Enter the New attribute name: ", attributeNewName, sizeof(attributeNewName));
-        printf("Enter the type of the attribute: 0(char) 1(int) 2(varchar): ");
+        readUserString("ingresa el nombre de la entidad del atributo que quieras modificar: ", entityname, sizeof(entityname));
+        readUserString("ingresa el nombre del atributo: ", attributename, sizeof(attributename));
+        readUserString("ingresa el nuevo nombre: ", attributeNewName, sizeof(attributeNewName));
+        printf("ingresa el tipo de atributo: 0(char) 1(int) 2(varchar): ");
         scanf("%d", &attribute_type);
         modifyAttribute(fileName, entityname, attributename, attributeNewName, attribute_type);
 

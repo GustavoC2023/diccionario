@@ -13,9 +13,7 @@ void printAttributeyData(FILE *dataDicitonary, long currentHeaderPointer) {
         Attribute tmp;
         long nextHeaderPointer;
 
-        // Go to the Entity location and read its data.
         fseek(dataDicitonary, headerValue, SEEK_SET);
-        // Read the name for the entity at the current position.
         fread(&tmp.name, sizeof(char), 50, dataDicitonary);
         fread(&tmp.Type,sizeof(AttributeType),1,dataDicitonary);
         fread(&tmp.size,sizeof(int),1,dataDicitonary); 
@@ -36,11 +34,11 @@ void printAttributeyData(FILE *dataDicitonary, long currentHeaderPointer) {
         
         default:
 
-            printf("Inavlid option\n");
+            printf("opcion no valida\n");
             break;
         }
 
-        printf("\tAttribute: %s type: %s size: %d\n", tmp.name,type,tmp.size);
+        printf("\tatributo: %s tipo: %s tamaño: %d\n", tmp.name,type,tmp.size);
         nextHeaderPointer = ftell(dataDicitonary);
         printAttributeyData(dataDicitonary,nextHeaderPointer);
     } 
@@ -60,7 +58,7 @@ int appendAttribute(FILE *dataDictionary, Attribute *NewAttribute){
     fwrite(&NewAttribute->size,sizeof(int),1,dataDictionary);
     fwrite(&NewAttribute->ApAtributo,sizeof(long),1,dataDictionary);
 
-    printf("New attribute %s has been added to the position %li\n",NewAttribute->name,NewAttribute->FileDirection);
+    printf("nuevo atributo %s a sido añadido a la posicion %li\n",NewAttribute->name,NewAttribute->FileDirection);
 
     return resultoperation;
 }
@@ -110,7 +108,7 @@ int removeAttribute(FILE *dataDictionary, long currentAttributeHeader, Attribute
 
     if(currentAttributeDirection==-1L){
 
-        fprintf(stderr,"Attribute was not found");
+        fprintf(stderr,"El atributo no se encontro xd");
         return EXIT_FAILURE;
     }else{
 
@@ -130,7 +128,7 @@ int removeAttribute(FILE *dataDictionary, long currentAttributeHeader, Attribute
 
             fseek(dataDictionary,currentAttributeHeader,SEEK_SET);
             fwrite(&AttributeTmp->ApAtributo,sizeof(long),1,dataDictionary);
-            fprintf(stdout,"The attribute was eliminated!\n");
+            fprintf(stdout,"el atributo a sido eliminado\n");
             return EXIT_SUCCESS;
         }else{
 
